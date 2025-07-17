@@ -1,45 +1,16 @@
-// js/app.js
-
-$(document).ready(function() {
-  const $book = $('#flipbook');
-  const narrador = document.getElementById('narrador');
-
-  initFlipbook();
-
-  // Al cambiar de página, reproduce el audio
-  $book.bind('turned', function(e, page) {
-    const audioSrc = $book.find('.page').eq(page-1).data('audio');
-    if (audioSrc) {
-      narrador.src = audioSrc;
-      narrador.play().catch(()=>{/* bloqueado si no se activó */});
-    } else {
-      narrador.pause();
-    }
-  });
-
-  // Resize responsive sin destruir
-  $(window).on('resize', function() {
-    if ($book.data('turn')) {
-      const w = Math.min(window.innerWidth * 0.9, 600);
-      const h = Math.round(w * (4/3)); // ajusta según tu aspect-ratio
-      $book.turn('size', w, h);
-    }
-  });
-});
-
 function initFlipbook() {
   const $book = $('#flipbook');
+  // ancho = 90% viewport o 600px máximo
   const w = Math.min(window.innerWidth * 0.9, 600);
-  const h = Math.round(w * (4/3)); // ajusta según tu aspect-ratio
+  // altura = ancho * (1536/1024) = ancho * 1.5
+  const h = Math.round(w * 1.5);
 
   $book.turn({
     width: w,
     height: h,
-    autoCenter: true,
-    pages: $book.find('.page').length
+    autoCenter: true
   });
 
-  // Zoom opcional (mantiene una página a la vez)
   $book.turn('zoom', {
     max: 2,
     when: {
@@ -48,4 +19,28 @@ function initFlipbook() {
       swipeRight: function() { this.turn('previous'); }
     }
   });
+
+  $book.bind('turned', function(e, page) {
+    const src = $book.find('.page').eq(page-1).data('audio');
+    const narrador = document.getElementById('narrador');
+    if (src) {
+      narrador.src = src;
+      narrador.play().catch(()=>{/* si está bloqueado */});
+    } else {
+      narrador.pause();
+    }
+  });
 }
+
+// cuando cargue el DOM:
+$(document).ready(function() {
+  initFlipbook();
+  $(window).on('resize', function() {
+    // redimensiona sin destruir
+    if ($('#flipbook').data('turn')) {
+      const nw = Math.min(window.innerWidth * 0.9, 600);
+      const nh = Math.round(nw * 1.5);
+      $('#flipbook').turn('size', nw, nh);
+    }
+  });
+});
