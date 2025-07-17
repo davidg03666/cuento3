@@ -7,40 +7,24 @@ function initFlipbook() {
       turned: function(event, page) {
         const audioSrc = $('#flipbook .page').eq(page-1).data('audio');
         const narrador = document.getElementById('narrador');
-        if (audioSrc) {
+        /*if (audioSrc) {
           narrador.src = audioSrc;
-          narrador.play().catch(e => {
-            console.warn('Audio bloqueado hasta interacción del usuario');
-          });
+          narrador.play();
         } else {
           narrador.pause();
-        }
+        }*/
       }
     }
   });
 }
 
 $(document).ready(function() {
-  const startBtn = document.getElementById('startReading');
-  const narrador  = document.getElementById('narrador');
+  // inicializa el flipbook
+  initFlipbook();
 
-  startBtn.addEventListener('click', function() {
-    // Este play/pause desbloquea el permiso de audio
-    narrador.play()
-      .then(() => narrador.pause())
-      .finally(() => {
-        // Ahora podemos inicializar el flipbook
-        initFlipbook();
-        // Ocultamos el botón
-        startBtn.style.display = 'none';
-      });
-  });
-
-  // Opcional: si quieres que el usuario pueda reiniciar la página
-  window.addEventListener('resize', function() {
-    if ($('#flipbook').data('turn') && startBtn.style.display === 'none') {
-      $('#flipbook').turn('destroy').html($('#flipbook').html());
-      initFlipbook();
-    }
+  // en resize, destruye y vuelve a inicializar
+  $(window).on('resize', function() {
+    $('#flipbook').turn('destroy').html($('#flipbook').html());
+    initFlipbook();
   });
 });
