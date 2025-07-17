@@ -21,8 +21,8 @@ $(document).ready(function() {
   // En resize ajustamos tamaño sin destruir la instancia
   $(window).on('resize', function() {
     if ($book.data('turn')) {
-      const w = Math.min(window.innerWidth * 0.9, 800);
-      const h = Math.round(w * 0.66);
+      const w = Math.min(window.innerWidth * 0.9, 600);
+      const h = Math.round(w * 1.5);
       $book.turn('size', w, h);
     }
   });
@@ -30,12 +30,12 @@ $(document).ready(function() {
 
 function initFlipbook() {
   const $book = $('#flipbook');
-  const w     = Math.min(window.innerWidth * 0.9, 800);
-  const h     = Math.round(w * 0.66);
+  const w     = Math.min(window.innerWidth * 0.9, 600);
+  const h     = Math.round(w * 1.5);
 
   // Inicialización con display single
-  $book.turn({
-    display:    'single',  // ← muestra solo UNA página
+  $book.css({ width: w + 'px', height: h + 'px' }).turn({
+    display:    'single',
     width:      w,
     height:     h,
     autoCenter: true
