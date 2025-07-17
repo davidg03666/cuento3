@@ -3,6 +3,7 @@
   width: 800px;       /* ancho para escritorio */
   height: 500px;      /* alto fijo */
   margin: 40px auto;  /* centrado */
+  transform-origin: center center; /* o “left top” si prefieres */
 }
 
 /* Cada página debe ocupar la mitad del contenedor */
