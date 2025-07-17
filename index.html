@@ -7,8 +7,8 @@
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-     <!-- Botón para iniciar la narración y el flipbook -->
-  <button id="startReading">▶ Iniciar narración</button>
+   <!-- Botón solo para desbloquear audio -->
+  <button id="unlockAudio" onclick="unlockNarration()">▶ Activar narración</button>
   
   <div id="flipbook">
     <div class="page" data-audio="https://www.aninvite2u.co/wp-content/uploads/2025/07/pagina1.mp3">
@@ -31,6 +31,20 @@
   <script src="js/turn.min.js"></script>
   <script src="js/zoom.js"></script>
   <!-- Tu lógica personalizada -->
+
+  <script>
+    function unlockNarration() {
+      const audio = document.getElementById('narrador');
+      // play–pause inmediato para "liberar" autoplay
+      audio.play()
+           .then(() => audio.pause())
+           .finally(() => {
+             // ocultamos el botón
+             document.getElementById('unlockAudio').style.display = 'none';
+           });
+    }
+  </script>
+  
   <script src="js/app.js"></script>
 </body>
 </html>
