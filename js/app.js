@@ -4,6 +4,8 @@ function initFlipbook() {
   const w = Math.min(window.innerWidth * 0.9, 600);
   // altura = ancho * (1536/1024) = ancho * 1.5
   const h = Math.round(w * 1.5);
+   // aplica tamaño explícito al contenedor
+  $book.css({ width: w + 'px', height: h + 'px' });
 
   $book.turn({
     width: w,
