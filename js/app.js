@@ -1,29 +1,27 @@
+// js/app.js
+
 $(document).ready(function() {
-  const $book    = $('#flipbook');
+  const $book = $('#flipbook');
   const narrador = document.getElementById('narrador');
 
-  // Inicializamos Turn.js + Zoom en cuanto carga el DOM
   initFlipbook();
 
-  // Cada vez que cambias de página, lanzamos audio (si ya está desbloqueado)
+  // Al cambiar de página, reproduce el audio
   $book.bind('turned', function(e, page) {
-    const src = $book.find('.page').eq(page-1).data('audio');
-    if (src) {
-      narrador.src = src;
-      narrador.play().catch(() => {
-        // si no está desbloqueado, el usuario deberá hacer clic en el botón
-        console.warn('Narración bloqueada: haz clic en "Activar narración"');
-      });
+    const audioSrc = $book.find('.page').eq(page-1).data('audio');
+    if (audioSrc) {
+      narrador.src = audioSrc;
+      narrador.play().catch(()=>{/* bloqueado si no se activó */});
     } else {
       narrador.pause();
     }
   });
 
-  // Redimensionado responsive sin destruir
+  // Resize responsive sin destruir
   $(window).on('resize', function() {
     if ($book.data('turn')) {
-      const w = Math.min(window.innerWidth * 0.9, 800);
-      const h = Math.round(w * 0.66);
+      const w = Math.min(window.innerWidth * 0.9, 600);
+      const h = Math.round(w * (4/3)); // ajusta según tu aspect-ratio
       $book.turn('size', w, h);
     }
   });
@@ -31,21 +29,23 @@ $(document).ready(function() {
 
 function initFlipbook() {
   const $book = $('#flipbook');
-  const w     = Math.min(window.innerWidth * 0.9, 800);
-  const h     = Math.round(w * 0.66);
+  const w = Math.min(window.innerWidth * 0.9, 600);
+  const h = Math.round(w * (4/3)); // ajusta según tu aspect-ratio
 
   $book.turn({
-    width:      w,
-    height:     h,
-    autoCenter: true
+    width: w,
+    height: h,
+    autoCenter: true,
+    pages: $book.find('.page').length
   });
 
+  // Zoom opcional (mantiene una página a la vez)
   $book.turn('zoom', {
     max: 2,
     when: {
-      tap:         function() { this.toggle(); },
-      swipeLeft:   function() { this.turn('next'); },
-      swipeRight:  function() { this.turn('previous'); }
+      tap:        function() { this.toggle(); },
+      swipeLeft:  function() { this.turn('next'); },
+      swipeRight: function() { this.turn('previous'); }
     }
   });
 }
