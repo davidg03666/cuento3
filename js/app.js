@@ -1,5 +1,12 @@
 function initFlipbook() {
   const $book    = $('#flipbook');
+  // 1.1 construimos el array de data‑audio para inspección
+  const audioList = $book
+    .find('.page')
+    .map((i, el) => $(el).data('audio') || '(sin data‑audio)')
+    .get();
+  console.log('%c[audioList]', 'color:purple', audioList);
+
   const narrador = document.getElementById('narrador');
   const pageCount= $book.find('.page').length;
 
