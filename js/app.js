@@ -31,7 +31,7 @@ function initFlipbook() {
       // 2) Después de girar, toca el audio correcto
       turned: function(event, page, view) {
         // view[0] para single, o page si no existe
-        const currentPage = (view && view[0]) ? view[0] : page;
+        const currentPage = (view && view[0]) || page;
         const audioSrc    = $book
           .find('.page')
           .eq(currentPage - 1)
@@ -41,8 +41,13 @@ function initFlipbook() {
           'audioSrc:', audioSrc,
           'narrador.src:', narrador.src
         );
-        narrador.src = audioSrc;
-        if (audioSrc) narrador.play().catch(()=>{});
+        if (audioSrc) {
+    narrador.src = audioSrc;
+    narrador.load();                      // fuerza recarga del nuevo src
+    narrador.play().catch(e => {
+      console.warn('play error:', e);
+    });
+  }
       }
     }
   });
