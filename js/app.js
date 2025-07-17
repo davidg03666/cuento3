@@ -14,61 +14,60 @@ $(document).ready(function() {
   });
 });
 
-function initFlipbook() {
-  const $book     = $('#flipbook');
-  const narrador  = document.getElementById('narrador');
-  const pageCount = $book.find('.page').length;
+// js/app.js
 
-  // Calcula ancho/alto con proporción 1024×1536 → 1.5
+function initFlipbook() {
+  const $book    = $('#flipbook');
+  const narrador = document.getElementById('narrador');
+
+  // 1. Crea un array de URLs de audio en orden
+  const audioList = $book
+    .find('.page')
+    .map((i, el) => $(el).attr('data-audio') || '')
+    .get();
+  console.log('%c[audioList]', 'color:purple', audioList);
+
+  // 2. Calcula dimensiones (ratio 1024×1536 = 1.5)
   const w = Math.min(window.innerWidth * 0.9, 600);
   const h = Math.round(w * 1.5);
   $book.css({ width: w + 'px', height: h + 'px' });
 
+  // 3. Inicializa Turn.js en modo single
   $book.turn({
     display:    'single',
     width:      w,
     height:     h,
     autoCenter: true,
-    pages:      pageCount,
+    pages:      audioList.length,
     when: {
-      // Antes de girar, detén y reinicia cualquier audio
-      turning: function() {
+      turning() {
         narrador.pause();
         narrador.currentTime = 0;
       },
-      // Después de girar, extrae la página real de `view` y toca su audio
-      turned: function(event, page, view) {
-        const currentPage = (view && view[0]) || page;
-        // LEER DIRECTO EL ATRIBUTO, no $.data()
-        const audioSrc = $book
-          .find('.page')
-          .eq(currentPage - 1)
-          .attr('data-audio') || '';
-
+      turned(event, page, view) {
+        const currentPage = (view && view[0]) ? view[0] : page;
+        const audioSrc    = audioList[currentPage - 1] || '';
         console.log(
           '%c[turned]','color:green',
-          'página→', currentPage,
+          'pagina→', currentPage,
           'audio→', audioSrc
         );
-
         if (audioSrc) {
           narrador.src = audioSrc;
           narrador.load();
-          narrador.play().catch(e =>
-            console.warn('play error:', e)
-          );
+          narrador.play().catch(e => console.warn('play error:', e));
         }
       }
     }
   });
 
-  // Activa Zoom sobre la misma instancia
+  // 4. Activa Zoom
   $book.turn('zoom', {
     max: 2,
     when: {
-      tap:        function() { this.toggle(); },
-      swipeLeft:  function() { this.turn('next'); },
-      swipeRight: function() { this.turn('previous'); }
+      tap()        { this.toggle(); },
+      swipeLeft()  { this.turn('next'); },
+      swipeRight() { this.turn('previous'); }
     }
   });
 }
