@@ -2,16 +2,15 @@ $(document).ready(function() {
   const $book    = $('#flipbook');
   const narrador = document.getElementById('narrador');
 
-  // Inicializamos Turn.js + Zoom en cuanto carga el DOM
+  // Arranca el flipbook en cuanto carga el DOM
   initFlipbook();
 
-  // Cada vez que cambias de página, lanzamos audio (si ya está desbloqueado)
+  // Cuando el usuario pase página, dispara el audio correspondiente
   $book.bind('turned', function(e, page) {
-    const src = $book.find('.page').eq(page-1).data('audio');
+    const src = $book.find('.page').eq(page - 1).data('audio');
     if (src) {
       narrador.src = src;
       narrador.play().catch(() => {
-        // si no está desbloqueado, el usuario deberá hacer clic en el botón
         console.warn('Narración bloqueada: haz clic en "Activar narración"');
       });
     } else {
@@ -19,7 +18,7 @@ $(document).ready(function() {
     }
   });
 
-  // Redimensionado responsive sin destruir
+  // En resize ajustamos tamaño sin destruir la instancia
   $(window).on('resize', function() {
     if ($book.data('turn')) {
       const w = Math.min(window.innerWidth * 0.9, 800);
@@ -34,18 +33,21 @@ function initFlipbook() {
   const w     = Math.min(window.innerWidth * 0.9, 800);
   const h     = Math.round(w * 0.66);
 
+  // Inicialización con display single
   $book.turn({
+    display:    'single',  // ← muestra solo UNA página
     width:      w,
     height:     h,
     autoCenter: true
   });
 
+  // Zoom opcional sobre la misma instancia
   $book.turn('zoom', {
     max: 2,
     when: {
-      tap:         function() { this.toggle(); },
-      swipeLeft:   function() { this.turn('next'); },
-      swipeRight:  function() { this.turn('previous'); }
+      tap:        function() { this.toggle(); },
+      swipeLeft:  function() { this.turn('next'); },
+      swipeRight: function() { this.turn('previous'); }
     }
   });
 }
