@@ -17,6 +17,7 @@ function initFlipbook() {
     when: {
       // 1) Antes de girar la página, para el audio y lo reinicia
       turning: function(event, page, view) {
+        console.log('%c[turning]','color:blue','→ requested page:', page, 'view:', view);
         narrador.pause();
         narrador.currentTime = 0;
       },
@@ -28,7 +29,11 @@ function initFlipbook() {
           .find('.page')
           .eq(currentPage - 1)
           .data('audio') || '';
-
+          console.log('%c[turned]','color:green',
+          '→ currentPage:', currentPage,
+          'audioSrc:', audioSrc,
+          'narrador.src:', narrador.src
+        );
         narrador.src = audioSrc;
         if (audioSrc) narrador.play().catch(()=>{});
       }
