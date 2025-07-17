@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cuento Flipbook</title>
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <div id="flipbook">
+    <div class="page" data-audio="https://www.aninvite2u.co/wp-content/uploads/2025/07/pagina1.mp3">
+      <img src="https://www.aninvite2u.co/wp-content/uploads/2025/07/ChatGPT-Image-15-jul-2025-01_47_59-p.m.png" alt="Página 1">
+    </div>
+    <div class="page" data-audio="https://www.aninvite2u.co/wp-content/uploads/2025/07/pagina2.mp3">
+      <img src="https://www.aninvite2u.co/wp-content/uploads/2025/07/ChatGPT-Image-15-jul-2025-02_17_21-p.m.png" alt="Página 2">
+    </div>
+    <div class="page" data-audio="https://www.aninvite2u.co/wp-content/uploads/2025/07/pagina1.mp3">
+      <img src="https://www.aninvite2u.co/wp-content/uploads/2025/07/ChatGPT-Image-15-jul-2025-02_26_39-p.m.png" alt="Página 3">
+    </div>
+    <!-- añade más páginas si necesitas -->
+  </div>
+
+  <!-- Reproductor de audio oculto -->
+  <audio id="narrador" controls style="display:none;"></audio>
+
+  <!-- Librerías externas -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+  <!-- Tu lógica personalizada -->
+  <script src="js/app.js"></script>
+</body>
+</html>
