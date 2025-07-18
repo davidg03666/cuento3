@@ -2,6 +2,29 @@ $(document).ready(function() {
   const $book    = $('#flipbook');
   const narrador = document.getElementById('narrador');
 
+
+
+  $('#startNarration').on('click', function() {
+  const currentPage = $('#flipbook').turn('page');
+  const audioSrc    = audioList[currentPage - 1];
+  if (!audioSrc) {
+    console.warn(`La página ${currentPage} no tiene audio en audioList.`);
+    return;
+  }
+  narrador.pause();
+  narrador.currentTime = 0;
+  narrador.src = audioSrc;
+  narrador.load();
+  narrador.play().catch(e => console.warn('play error:', e));
+});
+
+
+   $('#pauseNarration').on('click', function() {
+    narrador.pause();
+  });
+
+   
+
   initFlipbook();
 
   // Resize responsive sin destruir
@@ -20,8 +43,10 @@ function initFlipbook() {
   const $book    = $('#flipbook');
   const narrador = document.getElementById('narrador');
 
+
+
   // 1. Crea un array de URLs de audio en orden
-  const audioList = $book
+  audioList = $book
     .find('.page')
     .map((i, el) => $(el).attr('data-audio') || '')
     .get();
