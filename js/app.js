@@ -61,6 +61,13 @@ function initFlipbook() {
     }
   });
 
+  // 4) Elimina las páginas en blanco añadidas
+  const total = $book.turn('pages');
+  const real  = audioList.length;
+  for (let p = real + 1; p <= total; p++) {
+    $book.turn('removePage', p);
+  }
+  
   // 4. Activa Zoom
   $book.turn('zoom', {
     max: 2,
